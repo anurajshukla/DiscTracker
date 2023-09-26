@@ -3,6 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container, InputGroup, FormControl, Button, Row, Card } from 'react-bootstrap'
 import { useState, useEffect } from 'react';
 import logo from './img/logo.png';
+import Popup from 'reactjs-popup';
 
 const CLIENT_ID="358bc2a999a44de5a9a9da31578fd911"
 const CLIENT_SECRET="b8554cb38f6c483da703420f5e52c18f"
@@ -12,11 +13,6 @@ function App() {
   const [searchInput, setSearchInpt] = useState("");
   const [accessToken, setAccessToken] = useState("");
   const [albums, setAlbums] = useState([]);
-
-  // new card comp
-  const [isShown, setIsShown] = useState(false);
-  const handleClick = event => { setIsShown(current => !current); };
-
 
   useEffect(() => {
     var authParameters = {
@@ -85,13 +81,13 @@ function App() {
             return (
               <Card className='b'>
               <Card.Img src={album.images[0].url} onClick={()=> window.open(album.external_urls.spotify, "_blank")} />
-              <Card.Body className='d-none d-lg-block' onClick={handleClick}>
-              {isShown ? <>
-                <Card.Text> Released: {album.release_date}</Card.Text> 
-                <Card.Text> Total Tracks: {album.total_tracks } </Card.Text> </>
-              : null }
+              <Card.Body className='d-none d-lg-block'>
               <Card.Title> {album.name} </Card.Title>
-              
+              <Popup className='popup-content popup-overlay popup-arrow' trigger= {<Button> More </Button>} position="top center">
+                  <Card.Text> Released: {album.release_date}</Card.Text> 
+                  <Card.Text> Total Tracks: {album.total_tracks } </Card.Text>
+                  <Card.Text> Type: {album.album_group } </Card.Text>
+              </Popup>
               </Card.Body>
               </Card>
             )
